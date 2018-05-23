@@ -1,0 +1,294 @@
+## @brief ArbotiX errors. Used by now to handle broken serial connections.
+class ArbotiXException(Exception):
+    pass
+
+## @brief This class controls an ArbotiX, USBDynamixel, or similar board through a serial connection.
+class ArbotiX:
+
+    ## @brief Constructs an ArbotiX instance, optionally opening the serial connection.
+    ##
+    ## @param port The name of the serial port to open.
+    ## 
+    ## @param baud The baud rate to run the port at. 
+    ##
+    ## @param timeout The timeout to use for the port. When operating over a wireless link, you may need to
+    ## increase this.
+    ##
+    ## @param open Whether to open immediately the serial port.
+    def __init__(self, port="/dev/ttyUSB0", baud=115200, timeout=0.1, open_port=True):
+
+   	
+    def __write__(self, msg):
+
+
+    def openPort(self):
+
+
+    def closePort(self):
+
+    
+    ## @brief Read a dynamixel return packet in an iterative attempt.
+    ##
+    ## @param mode This should be 0 to start reading packet. 
+    ##
+    ## @return The error level returned by the device. 
+    def getPacket(self, mode, id=-1, leng=-1, error=-1, params = None):
+    
+
+    ## @brief Send an instruction to the device. 
+    ##
+    ## @param index The ID of the servo to write.
+    ##
+    ## @param ins The instruction to send.
+    ##
+    ## @param params A list of the params to send.
+    ##
+    ## @param ret Whether to read a return packet.
+    ##
+    ## @return The return packet, if read.
+    def execute(self, index, ins, params, ret=True):
+
+    
+    ## @brief Read values of registers.
+    ##
+    ## @param index The ID of the servo.
+    ## 
+    ## @param start The starting register address to begin the read at.
+    ##
+    ## @param length The number of bytes to read.
+    ##
+    ## @return A list of the bytes read, or -1 if failure.
+    def read(self, index, start, length):
+    
+
+    ## @brief Write values to registers.
+    ##
+    ## @param index The ID of the servo.
+    ##
+    ## @param start The starting register address to begin writing to.
+    ##
+    ## @param values The data to write, in a list.
+    ##
+    ## @return The error level.
+    def write(self, index, start, values):
+      
+
+    ## @brief Write values to registers on many servos.
+    ##
+    ## @param start The starting register address to begin writing to.
+    ##
+    ## @param values The data to write, in a list of lists. Format should be
+    ## [(id1, val1, val2), (id2, val1, val2)]
+    def syncWrite(self, start, values):
+    
+
+    ## @brief Read values of registers on many servos.
+    ##
+    ## @param servos A list of the servo IDs to read from.
+    ##
+    ## @param start The starting register address to begin reading at.
+    ##
+    ## @param length The number of bytes to read from each servo.
+    ##
+    ## @return A list of bytes read.
+    def syncRead(self, servos, start, length):
+    
+    
+    ## @brief Set baud rate of a device.
+    ##
+    ## @param index The ID of the device to write (Note: ArbotiX is 253).
+    ##
+    ## @param baud The baud rate.
+    ##
+    ## @return The error level.
+    def setBaud(self, index, baud):
+    
+
+    ## @brief Get the return level of a device.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The return level, .
+    def getReturnLevel(self, index):
+    
+
+    ## @brief Set the return level of a device.
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param value The return level.
+    ##
+    ## @return The error level.
+    def setReturnLevel(self, index, value):       
+
+    ## @brief Turn on the torque of a servo.
+    ##
+    ## @param index The ID of the device to enable.
+    ##
+    ## @return The error level.
+    def enableTorque(self, index):
+   	
+
+    ## @brief Turn on the torque of a servo.
+    ##
+    ## @param index The ID of the device to disable.
+    ##
+    ## @return The error level.
+    def disableTorque(self, index):
+	
+
+    ## @brief Set the status of the LED on a servo.
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param value 0 to turn the LED off, >0 to turn it on
+    ##
+    ## @return The error level.
+    def setLed(self, index, value):
+    
+
+    ## @brief Set the position of a servo.
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param value The position to go to in, in servo ticks.
+    ##
+    ## @return The error level.
+    def setPosition(self, index, value):
+
+
+    ## @brief Set the speed of a servo.
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param value The speed to write.
+    ##
+    ## @return The error level.
+    def setSpeed(self, index, value):
+    
+
+    ## @brief Get the position of a servo.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The servo position.
+    def getPosition(self, index):
+
+    ## @brief Get the speed of a servo.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The servo speed.
+    def getSpeed(self, index):
+    
+        
+    ## @brief Get the goal speed of a servo.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The servo goal speed.
+    def getGoalSpeed(self, index):
+
+
+    ## @brief Get the voltage of a device.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The voltage, in Volts.
+    def getVoltage(self, index):
+        
+
+    ## @brief Get the temperature of a device.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return The temperature, in degrees C.
+    def getTemperature(self, index):
+  	
+
+    ## @brief Determine if a device is moving.
+    ##
+    ## @param index The ID of the device to read.
+    ##
+    ## @return True if servo is moving.
+    def isMoving(self, index):
+    
+
+    ## @brief Put a servo into wheel mode (continuous rotation).
+    ##
+    ## @param index The ID of the device to write.
+    def enableWheelMode(self, index):
+    
+
+    ## @brief Put a servo into servo mode.
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param resolution The resolution of the encoder on the servo. NOTE: if using 
+    ## 12-bit resolution servos (EX-106, MX-28, etc), you must pass resolution = 12.
+    ##
+    ## @return 
+    def disableWheelMode(self, index, resolution=10):
+    
+
+    ## @brief Set the speed and direction of a servo which is in wheel mode (continuous rotation).
+    ##
+    ## @param index The ID of the device to write.
+    ##
+    ## @param direction The direction of rotation, either FORWARD or BACKWARD
+    ##
+    ## @param speed The speed to move at (0-1023).
+    ##
+    ## @return 
+    def setWheelSpeed(self, index, direction, speed):
+    
+
+    ###########################################################################
+    -- Extended ArbotiX Driver
+
+
+    ## @brief Force the ArbotiX2 to rescan the Dynamixel busses.
+    def rescan(self):
+    
+
+    ## @brief Get the value of an analog input pin.
+    ##
+    ## @param index The ID of the pin to read (0 to 7).
+    ##
+    ## @param leng The number of bytes to read (1 or 2).
+    ##
+    ## @return 8-bit/16-bit analog value of the pin, -1 if error.
+    def getAnalog(self, index, leng=1):
+ 
+
+    ## @brief Get the value of an digital input pin.
+    ##
+    ## @param index The ID of the pin to read (0 to 31).
+    ##
+    ## @return 0 for low, 255 for high, -1 if error.
+    def getDigital(self, index):
+    
+
+    ## @brief Get the value of an digital input pin.
+    ##
+    ## @param index The ID of the pin to write (0 to 31).
+    ##
+    ## @param value The value of the port, >0 is high.
+    ##
+    ## @param direction The direction of the port, >0 is output.
+    ##
+    ## @return -1 if error.
+    def setDigital(self, index, value, direction=0xff):
+    
+
+    ## @brief Set the position of a hobby servo.
+    ##
+    ## @param index The ID of the servo to write (0 to 7).
+    ##
+    ## @param value The position of the servo in milliseconds (1500-2500). 
+    ## A value of 0 disables servo output.
+    ##
+    ## @return -1 if error.
+    def setServo(self, index, value):
+    
+

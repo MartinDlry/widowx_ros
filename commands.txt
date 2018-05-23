@@ -1,0 +1,36 @@
+class ArbotiXException(Exception):
+    pass
+class ArbotiX:
+    def __init__(self, port="/dev/ttyUSB0", baud=115200, timeout=0.1, open_port=True):
+    def __write__(self, msg):
+    def openPort(self):
+    def closePort(self):
+    def getPacket(self, mode, id=-1, leng=-1, error=-1, params = None):
+    def execute(self, index, ins, params, ret=True):
+    def read(self, index, start, length):
+    def write(self, index, start, values):
+    def syncWrite(self, start, values):
+    def syncRead(self, servos, start, length):
+    def setBaud(self, index, baud):
+    def getReturnLevel(self, index):
+    def setReturnLevel(self, index, value):       
+    def enableTorque(self, index):
+    def disableTorque(self, index):
+    def setLed(self, index, value):
+    def setPosition(self, index, value):
+    def setSpeed(self, index, value):
+    def getPosition(self, index):
+    def getSpeed(self, index):
+    def getGoalSpeed(self, index):
+    def getVoltage(self, index):
+    def getTemperature(self, index):
+    def isMoving(self, index):
+    def enableWheelMode(self, index):
+    def disableWheelMode(self, index, resolution=10):
+    def setWheelSpeed(self, index, direction, speed):
+    -- Extended ArbotiX Driver
+    def rescan(self):
+    def getAnalog(self, index, leng=1):
+    def getDigital(self, index):
+    def setDigital(self, index, value, direction=0xff):
+    def setServo(self, index, value):
