@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(widowx_ros)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -52,6 +52,7 @@ add_message_files(
   FILES
 	Request.msg
 	Response.msg
+	IntList.msg
 	)
 
 ## Generate services in the 'srv' folder
@@ -104,8 +105,8 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES widowx_ros
+  INCLUDE_DIRS include
+#LIBRARIES widowx_ros
   CATKIN_DEPENDS roscpp rospy message_runtime
 #  DEPENDS system_lib
 )
@@ -117,13 +118,14 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/widowx_ros.cpp
+	#add_library( widowx  SHARED src/control_node.cpp src/Robot.cpp src/ServoGroup.cpp )
 # )
 
 ## Add cmake target dependencies of the library
@@ -151,9 +153,11 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(node src/node.cpp)
-target_link_libraries(node ${catkin_LIBRARIES})
-add_dependencies(node widowx_ros_generate_messages_cpp)
+add_executable(control_node src/control_node.cpp src/Robot.cpp src/ServoGroup.cpp )
+
+target_link_libraries(control_node ${catkin_LIBRARIES} )
+
+add_dependencies(control_node widowx_ros_generate_messages_cpp)
 
 #############
 ## Install ##

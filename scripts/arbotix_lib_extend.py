@@ -1,16 +1,26 @@
 from arbotix_python.arbotix import ArbotiX
-from arbotix_python.ax12 import *
+from servos_registers import *
 
 ids = range(1,7) # list of servos ids
 class ArbotiX_extended(ArbotiX):
+
+	def __init__(self, port = "/dev/ttyUSB0", baud = 115200):
+		
+		ArbotiX.__init__(self, port, baud)
+		print "Inititalizing robot connection"
+		while ( self.getPosition(1) == -1 ):
+			pass
+		print "Done"
+		self.setAllSpeeds( 20 )
 	
 	## @brief Read 2 bytes of registers on each servo.
 	##
-	## @param start The starting register address to begin reading at.
+	## @param registerName The register to read at.(string)
 	##
 	## @return A list of 6 integers.
-	def readAll( self , start ):
-		tab = self.syncRead( ids , start , 2)		
+	def readAll( self , registerName ):
+		reg = registersDict[register]
+		tab = self.syncRead( ids , reg[0] , reg[1])		
 		res = [0]*6 #table to write the 6 positions
 		for i in ids:
 			res[i-1] = tab[2*i-2] + ( tab[2*i-1]<<8 )
@@ -19,15 +29,20 @@ class ArbotiX_extended(ArbotiX):
 	
 	## @brief Write 2 bytes to registers on each servo.
 	##
-	## @param start The starting register address to begin writing to.
+	## @param registerName The register to write to. (string)
 	##
 	## @param values A list of 6 integers < 2^16
-	def writeAll(self, start , values ):
+	def writeAll(self, registerName , values ):
+		reg = registersDict[register]
 		tab = [None] * 6
-		for i in ids:
-			tab[i-1] = [ i , values[i-1]%256 , values[i-1]>>8 ]
-		print tab
-		self.syncWrite( start , tab )
+		if( reg[1] == 2 ):
+			for i in ids:
+				tab[i-1] = [ i , values[i-1]%256 , values[i-1]>>8 ]
+		else:
+			for i in ids:
+				tab[i-1] = [ i , values[i-1]%256 ]
+		
+		self.syncWrite( reg[0] , tab )
 	
 	## @brief Get actual position of each servo.
 	##

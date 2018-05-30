@@ -41,11 +41,12 @@ from std_msgs.msg import String
 from widowx_ros.msg import *
 from arbotix_python.arbotix import ArbotiX
 from arbotix_lib_extend import ArbotiX_extended
+from servos_registers import *
 
 robot = None
 
 def callback(msg):
-	rospy.loginfo(rospy.get_caller_id() + 'I heard %s', msg.request)
+	rospy.loginfo(rospy.get_caller_id() + 'I heard %s', msg.tag )
 	#processing the message
 
 	request = msg.request.split("_")
@@ -53,14 +54,6 @@ def callback(msg):
 	if( request[0] == "init" ):
 		global robot 
 		robot = ArbotiX_extended()
-		print "Inititalizing robot connection"
-		while ( robot.getPosition(1) == -1 ):
-			pass
-		print "Done"
-		print robot.getAllSpeeds()
-		robot.setAllSpeeds( 50 )
-		robot.setAllPositions( [2048 , 2048 , 2048 , 2048 , 1024 , 512 ] )
-		print robot.readAll( P_TORQUE_LIMIT_L )
 
 	elif( request[0] == "get" ):
 		if ( request[1] == "pos" ):
@@ -71,20 +64,31 @@ def callback(msg):
 		print "set"
 
 
+def callback(msg):
+	if ( len(msg.data) == 6 )
+	{
+		print msg.data
+		#robot.setAllPositions( msg.data )
+	}
 
 def listener():
 
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
+	# In ROS, nodes are uniquely named. If two nodes with the same
+	# name are launched, the previous one is kicked off. The
+	# anonymous=True flag means that rospy will choose a unique
+	# name for our 'listener' node so that multiple listeners can
+	# run simultaneously.
+	rospy.init_node('Python_Node', anonymous=False)
+	for( regName in registersDict.keys() ):
+		rospy.Subscriber( i + "/request" , IntList , callback )
+	
+	pub = rospy.Publisher( 'chatter', IntList , queue_size=10 )
+	rate = rospy.Rate(10)
 
-    rospy.Subscriber('robot1/input', Request , callback)
+	robot = ArbotiX_extended()
 
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+	# spin() simply keeps python from exiting until this node is stopped
+	rospy.spin()
 
 if __name__ == '__main__':
-    listener()
+	listener()
