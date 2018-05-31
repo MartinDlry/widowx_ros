@@ -1,15 +1,14 @@
 #include "ros/ros.h"
 #include <ros/spinner.h>
 #include <widowx_ros/IntList.h>
-#include <sstream>
-#include <string>
-#include "Robot.h"
+#include <WidowX.h>
 #include "ServoGroup.h"
 
+#include <sstream>
+#include <string>
+
 using namespace std;
-/**
- * This tutorial demonstrates simple sending of messages over the ROS system.
- */
+
 
 void posCallback(const widowx_ros::IntList::ConstPtr& msg)
 {
@@ -17,10 +16,9 @@ void posCallback(const widowx_ros::IntList::ConstPtr& msg)
 }
 
 int main(int argc, char **argv)
-{
-	Robot *r = new Robot();
-	
-	cout << (std::to_string( r->servoGroup.isValid() ));
+{	
+	WidowX r = WidowX();
+	cout << r.headPosition();
 	getchar();
 	ros::init(argc, argv, "Controller_Node");
 	ros::NodeHandle n;

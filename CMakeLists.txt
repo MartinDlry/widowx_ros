@@ -153,7 +153,16 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(control_node src/control_node.cpp src/Robot.cpp src/ServoGroup.cpp )
+add_executable(control_node 
+src/RosSpace.cpp
+src/Vec2.cpp
+src/Vec3.cpp
+src/WidowX.cpp
+src/control_node.cpp
+src/DynamixelServo.cpp
+src/Circle.cpp
+src/WidowXServos.cpp
+)
 
 target_link_libraries(control_node ${catkin_LIBRARIES} )
 

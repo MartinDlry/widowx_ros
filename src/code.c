@@ -101,7 +101,7 @@ struct _3DPos computeHead3DPosition( struct motors motors )
     return head3DPosition;
 }
 
-struct _2DPos computeHead2DPosition( struct motors motors )
+/*struct _2DPos computeHead2DPosition( struct motors motors )
 {
     double a = MXToRad(motors.shoulderMotor);
     struct _2DPos pos = computePos( l0 , a + alpha );
@@ -182,7 +182,7 @@ int radToMXWrist( double radAngle )
 int radToMXBase( double radAngle )
 {
     return ( (int)( radAngle * radToMXRatio + 0.5) + 4096 )%4096;
-}
+}*/
 
 /*int isValid( struct motors m )
 {
@@ -269,7 +269,7 @@ struct _2DPos computeWristPos( struct _2DPos goalPos , double goalAngle )
     return wristPos;
 }
 
-int circlesIntersections( struct circle c1 , struct circle c2 , struct _2DPos intersections[] ) //table size >=2
+/*int circlesIntersections( struct circle c1 , struct circle c2 , struct _2DPos intersections[] ) //table size >=2
 {
     double x1 = c1.center.x , y1 = c1.center.y , x2 = c2.center.x , y2 = c2.center.y , r1 = c1.radius , r2 = c2.radius;
     double m = (x1-x2)/(y2-y1);
@@ -323,5 +323,5 @@ void printCircle ( struct circle circle )
 {
     printf( "\nCircle:\n x: %lf\n y: %lf\n radius: %lf\n" , circle.center.x , circle.center.y , circle.radius );
 }
-
+*/
 

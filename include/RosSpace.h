@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "RosRobot.h"
+#include "Polygon3.h"
+
 class RosSpace
 {
     
@@ -11,7 +13,8 @@ class RosSpace
         RosSpace();
         
         std::vector<RosRobot*> mRosRobots;
-    
+        std::vector<Polygon3> mObstacles;
+        
     private:
 
 };

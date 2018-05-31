@@ -5,6 +5,7 @@
 class ServoGroup
 {
     public:
-        virtual bool validPositions();
+
+        virtual bool validPositions() = 0;
 };
 #endif

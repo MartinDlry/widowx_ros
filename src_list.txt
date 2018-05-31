@@ -1,0 +1,8 @@
+src/RosSpace.cpp
+src/Vec2.cpp
+src/Vec3.cpp
+src/WidowX.cpp
+src/control_node.cpp
+src/DynamixelServo.cpp
+src/Circle.cpp
+src/WidowXServos.cpp
