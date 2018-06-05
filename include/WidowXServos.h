@@ -7,6 +7,7 @@
 #include "ServoGroup.h"
 #include "DynamixelServo.h"
 
+
 #define ALPHA 0.3272 // sin(5/15)
 
 const std::array<int,6> BASE_POSITIONS = { 2048 , 2048 , 2048 , 2048 , 512 , 256 };
@@ -25,10 +26,17 @@ class WidowXServos : public ServoGroup
         ~WidowXServos();
         
         bool validPositions();
+        bool validPositions( std::array<int,6> positions );
 
         std::array<int,6> getPositions();
+        void setPositions( std::array<int,6> positions );
+        std::array<double,6> getRadians();
+        int variation( WidowXServos* servos );
 
     private:
-    
+        
 };
+
+std::ostream& operator<<(std::ostream &strm, const WidowXServos &wxServos);
+
 #endif

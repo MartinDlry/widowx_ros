@@ -5,6 +5,7 @@
 
 #include "RoboticArm.h"
 #include "Vec2.h"
+#include "WidowXServos.h"
 
 #define L0 15.0
 #define L1 14.14 
@@ -24,8 +25,9 @@ class WidowX : public RoboticArm
 
     private:
         Vec2 head2DPosition();
-        std::array<Vec3,6> servosGoalPositions; 
+        std::array<int,6> mServosGoalPositions; 
         Vec2 goal2D();
         Vec2 wristPosition();
+        void compute3LastMotors( WidowXServos* servos , Vec2 elbowPosition , Vec2 wristPosition );
 };
 #endif

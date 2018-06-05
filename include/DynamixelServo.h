@@ -7,6 +7,7 @@ class DynamixelServo
 
         DynamixelServo( int basePosition , double baseRadian , int positionsInOneTurn , int lowLimit , int upLimit );
         bool isValid();
+        bool isValid( int position );
         
         int position();
         double radian();
@@ -14,8 +15,8 @@ class DynamixelServo
         void setPosition( int position);
         void setAngle( double angle );
 
-        static double positionUnitToRadians( int position );
-        static int radiansToPositionUnit( double radians );
+        double positionUnitToRadians( int position );
+        int radiansToPositionUnit( double radians );
 
     private:
 

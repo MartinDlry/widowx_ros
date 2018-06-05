@@ -11,7 +11,7 @@ class ArbotiX_extended(ArbotiX):
 		while ( self.getPosition(1) == -1 ):
 			pass
 		print "Done"
-		self.setAllSpeeds( 20 )
+		self.setAllSpeeds( 50 )
 	
 	## @brief Read 2 bytes of registers on each servo.
 	##
@@ -19,7 +19,7 @@ class ArbotiX_extended(ArbotiX):
 	##
 	## @return A list of 6 integers.
 	def readAll( self , registerName ):
-		reg = registersDict[register]
+		reg = registersDict[registerName]
 		tab = self.syncRead( ids , reg[0] , reg[1])		
 		res = [0]*6 #table to write the 6 positions
 		for i in ids:
@@ -33,7 +33,7 @@ class ArbotiX_extended(ArbotiX):
 	##
 	## @param values A list of 6 integers < 2^16
 	def writeAll(self, registerName , values ):
-		reg = registersDict[register]
+		reg = registersDict[registerName]
 		tab = [None] * 6
 		if( reg[1] == 2 ):
 			for i in ids:
@@ -48,14 +48,14 @@ class ArbotiX_extended(ArbotiX):
 	##
 	## @return A list of 6 positions
 	def getAllPositions( self ):
-		return self.readAll( P_PRESENT_POSITION_L )
+		return self.readAll( "PRESENT_POSITION" )
 
 	
 	## @brief Set goal position for each servo.
 	##
 	## @param values A list of 6 goal positions
 	def setAllPositions( self , values ):
-		self.writeAll( P_GOAL_POSITION_L , values )
+		self.writeAll( "GOAL_POSITION" , values )
 
 	## @brief Set goal speed for each servo.
 	##
@@ -64,10 +64,10 @@ class ArbotiX_extended(ArbotiX):
 	def setAllSpeeds( self , values ):
 		if ( isinstance( values , int ) ):	#if we have an integer
 			values = [ values ] * 6		#we make a list containing 6 times this integer
-		self.writeAll( P_GOAL_SPEED_L , values )
+		self.writeAll( "GOAL_SPEED" , values )
 
 	## @brief Get goal speed of each servo.
 	##
 	## @return A list of 6 speeds
 	def getAllSpeeds( self ):
-		return self.readAll( P_GOAL_SPEED_L )
+		return self.readAll( "GOAL_SPEED" )

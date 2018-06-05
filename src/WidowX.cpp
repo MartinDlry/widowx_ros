@@ -1,5 +1,6 @@
 #include "WidowX.h"
 
+#include <sstream>
 #include <iostream>
 
 #include "ServoGroup.h"
@@ -28,23 +29,53 @@ Vec2 WidowX::head2DPosition()
 { 
     double a = 0;
     Vec2 pos( 0 , 0 );
-    std::cout << pos;
     for( int i = 1 ; i < 4 ; i++ )
     {
-
         a += ((((WidowXServos*)pServoGroup)-> mServos)[i])->radian(); //add the next servo relative radian angle
-        std::cout << "a=" << a << " length=" << mLengths[i-1] << std::endl;
         pos += Vec2::makeVec2( a , mLengths[i-1] ); // add the next servo relative position
-        std::cout << pos;
     }
     return pos;
 }
 
 bool WidowX::canReachGoal()
 {
-    WidowXServos s;
-    s.mServos[0]->setAngle( atan2( mGoal.mZ , mGoal.mX ));
+    WidowXServos testServos;
+    //std::cout << testServos << std::endl;
+    testServos.mServos[0]->setAngle( atan2( mGoal.mZ , mGoal.mX ));
+    //std::cout << "motor 0 pos :" << testServos.mServos[0]->position() << std::endl;
+    std::array<Vec2,2> intersections;
+    Vec2 wrist = wristPosition();
+    //std::cout << "wrist position =" << wrist << std::endl; 
+    if ( Circle( 0 , 0 , mLengths[0] ).intersect( Circle( wrist , mLengths[1] ) , &intersections) )
+    {
+        //std::cout << "intersection 0 = " << intersections[0] << std::endl;
+        //std::cout << "intersection 1 = " << intersections[1] << std::endl;
+        compute3LastMotors( &testServos , intersections[0] , wrist );
+        //std::cout << "case 1" << testServos << std::endl;
+        bool b =  testServos.validPositions();
+        int variation1 = ( (WidowXServos*)pServoGroup)->variation( &testServos );
+        //std::cout << "var = " << variation1 << std::endl;
+        std::array<int,6> pos1 = testServos.getPositions();
+        compute3LastMotors( &testServos , intersections[1] , wrist );
+        //std::cout << "case 2" <<testServos << std::endl;     
 
+        if ( testServos.validPositions() )
+        {
+            if( b && ( ( ( WidowXServos* )pServoGroup )->variation( &testServos ) ) > variation1 ) //if both are valid but first is better
+                mServosGoalPositions = pos1;
+            else
+                mServosGoalPositions = (testServos.getPositions()); 
+        }
+        else if( b )
+        {
+            mServosGoalPositions = pos1;
+        }
+        else
+        {
+            return false;
+        }
+        return true;
+    }
 }
 
 void WidowX::setGoal( Vec3 goal , double goalAngle )
@@ -55,11 +86,9 @@ void WidowX::setGoal( Vec3 goal , double goalAngle )
 
 void WidowX::goToGoal()
 {
-    std::array<Vec2,2> intersections;
-    Vec2 wrist = wristPosition();
-    if ( Circle( 0 , 0 , mLengths[0] ).intersect( Circle( wrist , mLengths[1] ) , &intersections) )
+    if( canReachGoal())
     {
-
+        ((WidowXServos*)pServoGroup)->setPositions( mServosGoalPositions );
     }
 }
 
@@ -73,7 +102,11 @@ Vec2 WidowX::wristPosition()
     return ( goal2D() - Vec2( cos(mGoalAngle) , sin(mGoalAngle) ) * mLengths[2] );
 }
 
-void compute3LastMotors( ServoGroup* sevroGroup , Vec2 elbowPosition , Vec2 wristPosition )
+void WidowX::compute3LastMotors( WidowXServos* servos , Vec2 elbowPosition , Vec2 wristPosition )
 {
-    
+    double a = atan2( elbowPosition.mY , elbowPosition.mX ),
+    a2 = atan2( (wristPosition.mY - elbowPosition.mY ) , (wristPosition.mX - elbowPosition.mX ));
+    servos->mServos[1]->setAngle( a );
+    servos->mServos[2]->setAngle( a2 - a );
+    servos->mServos[3]->setAngle( mGoalAngle - a2 );
 }

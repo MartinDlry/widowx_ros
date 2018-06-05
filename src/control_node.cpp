@@ -2,13 +2,39 @@
 #include <ros/spinner.h>
 #include <widowx_ros/IntList.h>
 #include <WidowX.h>
-#include "ServoGroup.h"
 
+#include "ServoGroup.h"
+#include "WidowXServos.h"
 #include <sstream>
 #include <string>
 
 using namespace std;
 
+Vec3 askForPosition()
+{
+	Vec3 v;
+	cout << "Position of object to reach :" << endl << "x = ";
+	cin >> v.mX;
+	cout << endl << "y = ";
+	cin >> v.mY;
+	cout << endl << "z = ";
+	cin >> v.mZ;
+	cout << endl;
+	return v;
+}
+
+widowx_ros::IntList makeMsg( std::array<int,6> positions )
+{
+	widowx_ros::IntList msg;
+	msg.id = rand();
+	msg.tag = "GOAL_POSITION";
+	msg.time = ros::Time::now();
+	for( int i = 0 ; i < 6 ; i ++ )
+	{
+		msg.data.push_back(positions[i]);
+	}
+	return msg;
+}
 
 void posCallback(const widowx_ros::IntList::ConstPtr& msg)
 {
@@ -18,12 +44,10 @@ void posCallback(const widowx_ros::IntList::ConstPtr& msg)
 int main(int argc, char **argv)
 {	
 	WidowX r = WidowX();
-	cout << r.headPosition();
-	getchar();
 	ros::init(argc, argv, "Controller_Node");
 	ros::NodeHandle n;
 
-	ros::Publisher chatter_pub = n.advertise<widowx_ros::IntList>("robot_1/request", 100);
+	ros::Publisher chatter_pub = n.advertise<widowx_ros::IntList>("robot1/GOAL_POSITION", 100);
 	ros::Subscriber sub = n.subscribe("robot_1/output", 100 , posCallback);
 	ros::Rate loop_rate(10);
 	ros::AsyncSpinner aSpinner( 1 );
@@ -36,31 +60,18 @@ int main(int argc, char **argv)
 	std::vector<int> pos( 6 , 2048 );
 	while (ros::ok())
 	{
-		widowx_ros::IntList msg;
-		cin >> msg.tag;
-		msg.id = count;
-		msg.time = ros::Time::now();
-		//cout << typeid(msg.data).name() ;
-		msg.data.resize(6);
-		ROS_INFO("%ld", msg.data.size());
-		for( int i = 0 ; i < 6 ; i++ )
+		r.setGoal( askForPosition(), M_PI );
+		if( r.canReachGoal() )
 		{
-			//msg.data.push_back( 2048 );
+			r.goToGoal();
+			widowx_ros::IntList msg = makeMsg( ((WidowXServos*)r.pServoGroup)->getPositions() );
+			chatter_pub.publish(msg);
 		}
-		//msg.data = pos;
-
-		ROS_INFO("%s", msg.tag.c_str());
-		ROS_INFO("%ld", msg.data.size());
-		/**
-		* The publish() function is how you send messages. The parameter
-		* is the message object. The type of this object must agree with the type
-		* given as a template parameter to the advertise<>() call, as was done
-		* in the constructor above.
-		*/
-		chatter_pub.publish(msg);
 
 		loop_rate.sleep();
 		++count;
 	}
 	return 0;
 }
+
+

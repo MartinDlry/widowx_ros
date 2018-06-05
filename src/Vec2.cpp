@@ -48,6 +48,7 @@ Vec2 Vec2::makeVec2( double angle , double length )
 }
 
 std::ostream& operator<<(std::ostream &strm, const Vec2 &v) {
-    return strm << "Vec2[" << v.mX << "," << v.mY << "]" ;
+
+    return (strm << "Vec2[" << v.mX << "," << v.mY << "]" );
 }
 

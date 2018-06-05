@@ -11,7 +11,7 @@ sed -i 's/_L =/ =/g' $FILE # removing all "_L" before "="
 sed -i '/]/! s/$/ , 1 ]/' $FILE # adding " , 1 ]" at the end of lines that don't contains "]"
 sed -i 's/ =/" :/g' $FILE  # replacing all " =" with "" : "
 sed -i 's/$/ ,/g' $FILE
-sed -i '$ s/\,//g' $FILE
+sed -i '$ s/,$//g' $FILE
 sed -i '1 s/^/registersDict = {\n/' $FILE
 sed -i '$ s/$/\n}/' $FILE
 

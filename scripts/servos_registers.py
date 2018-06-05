@@ -34,5 +34,5 @@ registersDict = {
 "PAUSE_TIME" : [ 45 , 1 ] ,
 "MOVING" : [ 46 , 1 ] ,
 "LOCK" : [ 47 , 1 ] ,
-"PUNCH" : [ 48  2 ] 
+"PUNCH" : [ 48 , 2 ] 
 }

@@ -45,31 +45,11 @@ from servos_registers import *
 
 robot = None
 
-def callback(msg):
-	rospy.loginfo(rospy.get_caller_id() + 'I heard %s', msg.tag )
-	#processing the message
 
-	request = msg.request.split("_")
-
-	if( request[0] == "init" ):
-		global robot 
-		robot = ArbotiX_extended()
-
-	elif( request[0] == "get" ):
-		if ( request[1] == "pos" ):
-			pos = robot.getPosition( int(request[2]) )
-			print pos
-		
-	elif( request[0] == "set" ):
-		print "set"
-
-
-def callback(msg):
-	if ( len(msg.data) == 6 )
-	{
-		print msg.data
-		#robot.setAllPositions( msg.data )
-	}
+def callback( msg , topic ):
+	global robot
+	if ( len(msg.data) == 6 ):
+		robot.writeAll( topic , msg.data )
 
 def listener():
 
@@ -78,13 +58,15 @@ def listener():
 	# anonymous=True flag means that rospy will choose a unique
 	# name for our 'listener' node so that multiple listeners can
 	# run simultaneously.
-	rospy.init_node('Python_Node', anonymous=False)
-	for( regName in registersDict.keys() ):
-		rospy.Subscriber( i + "/request" , IntList , callback )
+	nodeName = "robot1"
+	rospy.init_node( nodeName, anonymous=False)
+	for regName in registersDict.keys() :
+		rospy.Subscriber( nodeName + "/" + regName , IntList , callback , callback_args = regName )
 	
 	pub = rospy.Publisher( 'chatter', IntList , queue_size=10 )
 	rate = rospy.Rate(10)
 
+	global robot 
 	robot = ArbotiX_extended()
 
 	# spin() simply keeps python from exiting until this node is stopped

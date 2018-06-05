@@ -33,7 +33,8 @@ Vec3 Vec3::operator-( Vec3 p )
     return Vec3( (mX - p.mX) , (mY - p.mY) , (mZ - p.mZ) );
 }
 
-std::ostream& operator<<(std::ostream &strm, const Vec3 &v) {
-    return strm << "Vec3[" << v.mX << " , " << v.mY  << " , " << v.mZ << "]" ;
+std::ostream& operator<<(std::ostream &strm, const Vec3 &v) 
+{
+    return ( strm << "Vec3[" << v.mX << " , " << v.mY  << " , " << v.mZ << "]" ) ;
 }
 

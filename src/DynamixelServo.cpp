@@ -15,11 +15,19 @@ DynamixelServo::DynamixelServo( int basePosition , double baseRadian , int posit
 
     mRatioPositionUnitToRadians = ( M_PI * 2) / mPositionsInOneTurn ;
     mRatioRadiansToPositionUnit = 1 / mRatioPositionUnitToRadians ;
+
+    if ( mPositionsInOneTurn < 0 )
+        mPositionsInOneTurn = -mPositionsInOneTurn;
 }
 
 bool DynamixelServo::isValid()
 {
     return( ( mPosition >= mLowlimit ) && ( mPosition <= mUpLimit) );
+}
+
+bool DynamixelServo::isValid( int position )
+{
+    return( ( position >= mLowlimit ) && ( position <= mUpLimit) );
 }
 
 int DynamixelServo::position()
@@ -53,11 +61,11 @@ double DynamixelServo::positionUnitToRadians( int position )
 
 int DynamixelServo::radiansToPositionUnit( double radians )
 {
-    return( mBasePosition + mRatioRadiansToPositionUnit * ( radians - mBaseRadian ) );
+    return( mBasePosition + mRatioRadiansToPositionUnit * ( radians - mBaseRadian ) + 0.5 );
 }
 
 void DynamixelServo::normalizePosition()
-{
+{   
     mPosition = mPosition % mPositionsInOneTurn;
     if( mPosition < 0 )
         mPosition += mPositionsInOneTurn;
