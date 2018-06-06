@@ -125,7 +125,7 @@ include_directories(
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/widowx_ros.cpp
-	#add_library( widowx  SHARED src/control_node.cpp src/Robot.cpp src/ServoGroup.cpp )
+	#add_library(  )
 # )
 
 ## Add cmake target dependencies of the library

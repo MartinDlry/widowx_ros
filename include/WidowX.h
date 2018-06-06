@@ -17,6 +17,7 @@ class WidowX : public RoboticArm
     public:
         WidowX( );
         Vec3 headPosition();
+        WidowXServos* pWidowXServos;
         std::array<double,3> mLengths;
 
         bool canReachGoal();
@@ -26,8 +27,10 @@ class WidowX : public RoboticArm
     private:
         Vec2 head2DPosition();
         std::array<int,6> mServosGoalPositions; 
+        std::array<int,6> mServosGoalSpeeds;
         Vec2 goal2D();
         Vec2 wristPosition();
         void compute3LastMotors( WidowXServos* servos , Vec2 elbowPosition , Vec2 wristPosition );
+        void computeServosGoalSpeeds();
 };
 #endif

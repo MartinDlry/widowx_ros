@@ -27,7 +27,7 @@ void Circle::set( double centerX , double centerY , double radius )
     Circle::set( Vec2( centerX , centerY ) , radius );
 }
 
-bool Circle::roots( double a , double b , double c , std::array<double,2>* rootsTable )
+bool Circle::roots( double a , double b , double c , std::array<double,2>* rootsTable ) // solve quadratic equation
 {
     double delta = b*b - 4*a*c;
     if ( delta < 0 )

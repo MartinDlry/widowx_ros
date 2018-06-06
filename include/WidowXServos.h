@@ -4,7 +4,6 @@
 #include <array>
 #include <math.h>
 
-#include "ServoGroup.h"
 #include "DynamixelServo.h"
 
 
@@ -16,7 +15,7 @@ const std::array<int,6> LOW_LIMITS = { 0 , 1024 , 1024 , 1024 , 0 , 0 };
 const std::array<int,6> UP_LIMITS = { 4095 , 3072 , 3072 , 3072 , 1023 , 512 }; 
 const std::array<int,6> TOTAL_POS = { 4096 , 4096 , 4096 , -4096 , 1280 , 512 }; 
 
-class WidowXServos : public ServoGroup
+class WidowXServos
 {
     public:
         std::array<DynamixelServo*,6> mServos;
@@ -30,6 +29,8 @@ class WidowXServos : public ServoGroup
 
         std::array<int,6> getPositions();
         void setPositions( std::array<int,6> positions );
+        std::array<int,6> getSpeeds();
+        void setSpeeds( std::array<int,6> speeds );
         std::array<double,6> getRadians();
         int variation( WidowXServos* servos );
 

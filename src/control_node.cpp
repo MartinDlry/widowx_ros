@@ -3,7 +3,6 @@
 #include <widowx_ros/IntList.h>
 #include <WidowX.h>
 
-#include "ServoGroup.h"
 #include "WidowXServos.h"
 #include <sstream>
 #include <string>
@@ -15,9 +14,9 @@ Vec3 askForPosition()
 	Vec3 v;
 	cout << "Position of object to reach :" << endl << "x = ";
 	cin >> v.mX;
-	cout << endl << "y = ";
+	cout << "y = ";
 	cin >> v.mY;
-	cout << endl << "z = ";
+	cout <<"z = ";
 	cin >> v.mZ;
 	cout << endl;
 	return v;
@@ -27,7 +26,7 @@ widowx_ros::IntList makeMsg( std::array<int,6> positions )
 {
 	widowx_ros::IntList msg;
 	msg.id = rand();
-	msg.tag = "GOAL_POSITION";
+	msg.tag = "tag";
 	msg.time = ros::Time::now();
 	for( int i = 0 ; i < 6 ; i ++ )
 	{
@@ -47,7 +46,8 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "Controller_Node");
 	ros::NodeHandle n;
 
-	ros::Publisher chatter_pub = n.advertise<widowx_ros::IntList>("robot1/GOAL_POSITION", 100);
+	ros::Publisher chatter_pub_position = n.advertise<widowx_ros::IntList>("robot1/GOAL_POSITION", 100);
+	ros::Publisher chatter_pub_speed = n.advertise<widowx_ros::IntList>("robot1/GOAL_SPEED", 100);
 	ros::Subscriber sub = n.subscribe("robot_1/output", 100 , posCallback);
 	ros::Rate loop_rate(10);
 	ros::AsyncSpinner aSpinner( 1 );
@@ -60,14 +60,20 @@ int main(int argc, char **argv)
 	std::vector<int> pos( 6 , 2048 );
 	while (ros::ok())
 	{
-		r.setGoal( askForPosition(), M_PI );
+		
+		/*r.setGoal( askForPosition(), M_PI );
 		if( r.canReachGoal() )
 		{
 			r.goToGoal();
-			widowx_ros::IntList msg = makeMsg( ((WidowXServos*)r.pServoGroup)->getPositions() );
-			chatter_pub.publish(msg);
+			cout << r.pWidowXServos << endl;
+			chatter_pub_speed.publish( makeMsg( r.pWidowXServos->getSpeeds() ) );
+			chatter_pub_position.publish( makeMsg( r.pWidowXServos->getPositions() ));
+			cout << "Message published." << endl << endl;
 		}
-
+		else
+		{
+			cout << "Unreachable." << endl << endl;
+		}*/
 		loop_rate.sleep();
 		++count;
 	}

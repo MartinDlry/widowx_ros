@@ -48,6 +48,7 @@ robot = None
 
 def callback( msg , topic ):
 	global robot
+	print( "message received in topic" + topic )
 	if ( len(msg.data) == 6 ):
 		robot.writeAll( topic , msg.data )
 
